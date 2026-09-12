@@ -1,0 +1,74 @@
+name: Deploy contact API
+
+# The static site is deployed by Amplify Hosting on push. This workflow deploys
+# the serverless backend (API Gateway + Lambda + DynamoDB + SES).
+#
+# Required repository configuration:
+#   secrets.AWS_DEPLOY_ROLE_ARN  IAM role trusted by GitHub's OIDC provider
+#   vars.AWS_REGION              e.g. eu-west-1
+#   vars.SENDER_EMAIL            verified SES sender, e.g. no-reply@kroonenburg.capital
+#   vars.RECIPIENT_EMAIL         mailbox that receives enquiries
+#   vars.ALLOWED_ORIGINS         e.g. https://kroonenburg.capital,https://www.kroonenburg.capital
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "infrastructure/**"
+      - ".github/workflows/deploy-backend.yml"
+
+permissions:
+  contents: read
+  id-token: write # required for OIDC
+
+concurrency:
+  group: deploy-contact-api
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: sam deploy
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+
+      - name: Build
+        working-directory: infrastructure
+        run: sam build
+
+      - name: Deploy
+        working-directory: infrastructure
+        run: |
+          sam deploy \
+            --stack-name kroonenburg-contact-api \
+            --capabilities CAPABILITY_IAM \
+            --no-confirm-changeset \
+            --no-fail-on-empty-changeset \
+            --resolve-s3 \
+            --parameter-overrides \
+              SenderEmail="${{ vars.SENDER_EMAIL }}" \
+              RecipientEmail="${{ vars.RECIPIENT_EMAIL }}" \
+              AllowedOrigins="${{ vars.ALLOWED_ORIGINS }}"
+
+      - name: Show API endpoint
+        working-directory: infrastructure
+        run: |
+          aws cloudformation describe-stacks \
+            --stack-name kroonenburg-contact-api \
+            --query "Stacks[0].Outputs[?OutputKey=='ContactApiEndpoint'].OutputValue" \
+            --output text

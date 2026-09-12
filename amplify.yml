@@ -2,8 +2,33 @@ version: 1
 frontend:
   phases:
     build:
-      commands: []
+      commands:
+        # Assemble the publishable site so infrastructure/ and .github/ are
+        # never served. Everything here is static; there is no bundler.
+        - rm -rf dist
+        - mkdir -p dist
+        - cp index.html contact.html dist/
+        - cp -R assets team dist/
   artifacts:
-    baseDirectory: /
+    baseDirectory: dist
     files:
-      - '**/*'
+      - "**/*"
+  cache:
+    paths: []
+customHeaders:
+  - pattern: "**"
+    headers:
+      - key: Strict-Transport-Security
+        value: "max-age=63072000; includeSubDomains; preload"
+      - key: X-Content-Type-Options
+        value: "nosniff"
+      - key: X-Frame-Options
+        value: "DENY"
+      - key: Referrer-Policy
+        value: "strict-origin-when-cross-origin"
+      - key: Permissions-Policy
+        value: "geolocation=(), camera=(), microphone=(), interest-cohort=()"
+  - pattern: "/assets/**"
+    headers:
+      - key: Cache-Control
+        value: "public, max-age=31536000, immutable"

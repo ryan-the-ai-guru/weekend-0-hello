@@ -1,0 +1,157 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+
+Description: >
+  Kroonenburg Family Office - serverless contact API.
+  HTTP API Gateway -> Lambda -> DynamoDB (enquiry record) + SES (notification).
+  The static site itself is served by AWS Amplify Hosting from the repository.
+
+Parameters:
+  SenderEmail:
+    Type: String
+    Description: >
+      Verified SES identity that notification emails are sent from
+      (e.g. no-reply@kroonenburg.capital). The domain or address must be
+      verified in SES in this region before mail will send.
+  RecipientEmail:
+    Type: String
+    Description: >
+      Mailbox that receives enquiries. In the SES sandbox this address must also
+      be verified.
+  AllowedOrigins:
+    Type: String
+    Description: >
+      Comma-separated list of site origins permitted to call the API, e.g.
+      https://kroonenburg.capital,https://www.kroonenburg.capital
+    Default: "*"
+  RetentionDays:
+    Type: Number
+    Description: Days an enquiry is retained in DynamoDB before TTL removes it.
+    Default: 365
+    MinValue: 1
+    MaxValue: 3650
+  RateLimitMax:
+    Type: Number
+    Description: Maximum submissions accepted per client IP per window.
+    Default: 5
+    MinValue: 1
+  RateLimitWindowSeconds:
+    Type: Number
+    Description: Length of the rate-limit window, in seconds.
+    Default: 3600
+    MinValue: 60
+  LogRetentionDays:
+    Type: Number
+    Description: CloudWatch Logs retention for the contact function.
+    Default: 30
+
+Globals:
+  Function:
+    Runtime: nodejs22.x
+    Architectures: [arm64]
+    MemorySize: 256
+    Timeout: 10
+    Tracing: Active
+
+Resources:
+  EnquiriesTable:
+    Type: AWS::DynamoDB::Table
+    UpdateReplacePolicy: Retain
+    DeletionPolicy: Retain
+    Properties:
+      TableName: !Sub "${AWS::StackName}-enquiries"
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+      TimeToLiveSpecification:
+        AttributeName: expiresAt
+        Enabled: true
+      PointInTimeRecoverySpecification:
+        PointInTimeRecoveryEnabled: true
+      SSESpecification:
+        SSEEnabled: true
+
+  ContactApi:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      StageName: prod
+      # Coarse protection in front of the function; the handler applies a
+      # per-IP limit of its own.
+      DefaultRouteSettings:
+        ThrottlingBurstLimit: 20
+        ThrottlingRateLimit: 10
+      # API Gateway answers preflight itself and overrides the integration's
+      # CORS headers; the handler sets its own as a fallback, not a duplicate.
+      CorsConfiguration:
+        AllowMethods: [POST, OPTIONS]
+        AllowHeaders: [Content-Type]
+        AllowOrigins: !Split [",", !Ref AllowedOrigins]
+        MaxAge: 3600
+      AccessLogSettings:
+        DestinationArn: !GetAtt ApiAccessLogGroup.Arn
+        Format: >-
+          {"requestId":"$context.requestId","ip":"$context.identity.sourceIp","method":"$context.httpMethod","path":"$context.path","status":"$context.status","latency":"$context.responseLatency"}
+
+  ApiAccessLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/http-api/${AWS::StackName}"
+      RetentionInDays: !Ref LogRetentionDays
+
+  ContactFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub "${AWS::StackName}-contact"
+      CodeUri: src/contact/
+      Handler: index.handler
+      Description: Validates, stores and forwards website contact enquiries.
+      Environment:
+        Variables:
+          TABLE_NAME: !Ref EnquiriesTable
+          SENDER_EMAIL: !Ref SenderEmail
+          RECIPIENT_EMAIL: !Ref RecipientEmail
+          ALLOWED_ORIGINS: !Ref AllowedOrigins
+          RETENTION_DAYS: !Ref RetentionDays
+          RATE_LIMIT_MAX: !Ref RateLimitMax
+          RATE_LIMIT_WINDOW_SECONDS: !Ref RateLimitWindowSeconds
+      Policies:
+        - DynamoDBCrudPolicy:
+            TableName: !Ref EnquiriesTable
+        - Statement:
+            - Effect: Allow
+              Action:
+                - ses:SendEmail
+              Resource: "*"
+              Condition:
+                StringEquals:
+                  ses:FromAddress: !Ref SenderEmail
+      Events:
+        PostContact:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref ContactApi
+            Path: /contact
+            Method: POST
+
+  ContactFunctionLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub "/aws/lambda/${AWS::StackName}-contact"
+      RetentionInDays: !Ref LogRetentionDays
+
+Outputs:
+  ContactApiEndpoint:
+    Description: >
+      Base URL for the contact API. Set this as window.KFO_CONTACT_API in
+      contact.html (the client appends /contact).
+    Value: !Sub "https://${ContactApi}.execute-api.${AWS::Region}.amazonaws.com/prod"
+  EnquiriesTableName:
+    Description: DynamoDB table holding submitted enquiries.
+    Value: !Ref EnquiriesTable
+  ContactFunctionArn:
+    Description: ARN of the contact Lambda function.
+    Value: !GetAtt ContactFunction.Arn

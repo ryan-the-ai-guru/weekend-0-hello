@@ -1,191 +1,218 @@
 <!doctype html>
+<!--
+  Kroonenburg Family Office — landing page.
+  NOTE: Team member names, biographies and credentials below are PLACEHOLDERS.
+  Replace them with real details before this site is published publicly.
+-->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Weekend 0 hello world — a tiny page, shipped and live on Amplify." />
-    <title>Hello, world · Weekend 0</title>
-    <style>
-      :root {
-        --ink: #1c1710;
-        --paper: #f3ead6;
-        --paper-2: #e7d9b8;
-        --copper: #b4532a;
-        --copper-deep: #8c3b1c;
-        --live: #2f7a45;
-        --muted: #6a5d4a;
-        --line: rgba(28, 23, 16, 0.16);
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      html,
-      body {
-        margin: 0;
-        min-height: 100%;
-      }
-
-      body {
-        color: var(--ink);
-        background:
-          radial-gradient(1200px 700px at 12% -10%, #fff6e4 0%, transparent 55%),
-          radial-gradient(900px 500px at 110% 20%, #e8c9a0 0%, transparent 45%),
-          var(--paper);
-        font-family: "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
-        line-height: 1.45;
-      }
-
-      .grain {
-        pointer-events: none;
-        position: fixed;
-        inset: 0;
-        opacity: 0.18;
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
-        mix-blend-mode: multiply;
-      }
-
-      .frame {
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 2.5rem 1.25rem;
-      }
-
-      main {
-        position: relative;
-        width: min(42rem, 100%);
-        padding: 2.75rem 2.25rem 2.1rem;
-        border: 1px solid var(--line);
-        background: #f7f0de;
-        box-shadow:
-          0 1px 0 rgba(255, 255, 255, 0.55) inset,
-          0 24px 50px rgba(28, 23, 16, 0.08);
-      }
-
-      .watermark {
-        position: absolute;
-        right: -0.15em;
-        top: -0.28em;
-        font-size: clamp(10rem, 32vw, 16rem);
-        line-height: 0.8;
-        font-weight: 700;
-        color: transparent;
-        -webkit-text-stroke: 1.5px rgba(180, 83, 42, 0.18);
-        user-select: none;
-        pointer-events: none;
-        letter-spacing: -0.08em;
-      }
-
-      .kicker {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.55rem 0.75rem;
-        align-items: center;
-        margin: 0 0 1.5rem;
-        font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-        font-size: 0.72rem;
-        letter-spacing: 0.16em;
-        text-transform: uppercase;
-        color: var(--muted);
-      }
-
-      .live {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.4rem;
-        color: var(--live);
-      }
-
-      .live::before {
-        content: "";
-        width: 0.5rem;
-        height: 0.5rem;
-        border-radius: 50%;
-        background: var(--live);
-        box-shadow: 0 0 0 0 rgba(47, 122, 69, 0.7);
-        animation: pulse 1.8s ease-out infinite;
-      }
-
-      h1 {
-        margin: 0 0 0.85rem;
-        font-size: clamp(2.8rem, 9vw, 5.1rem);
-        font-weight: 700;
-        letter-spacing: -0.045em;
-        line-height: 0.92;
-      }
-
-      h1 span {
-        color: var(--copper);
-      }
-
-      p {
-        margin: 0 0 1.15rem;
-        max-width: 32rem;
-        font-size: 1.12rem;
-        color: #3b3226;
-      }
-
-      .meta {
-        margin-top: 1.75rem;
-        padding-top: 1.1rem;
-        border-top: 1px solid var(--line);
-        display: grid;
-        gap: 0.35rem;
-        font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-        font-size: 0.78rem;
-        color: var(--muted);
-      }
-
-      .rule {
-        height: 3px;
-        width: 3.25rem;
-        margin: 0 0 1.35rem;
-        background: linear-gradient(90deg, var(--copper), var(--copper-deep));
-      }
-
-      @keyframes pulse {
-        0% {
-          box-shadow: 0 0 0 0 rgba(47, 122, 69, 0.55);
-        }
-        100% {
-          box-shadow: 0 0 0 0.7rem rgba(47, 122, 69, 0);
-        }
-      }
-
-      @media (max-width: 640px) {
-        main {
-          padding: 2rem 1.25rem 1.6rem;
-        }
-
-        p {
-          font-size: 1.02rem;
-        }
-      }
-    </style>
+    <title>Kroonenburg Family Office</title>
+    <meta
+      name="description"
+      content="A single-family office stewarding capital, governance and legacy across generations."
+    />
+    <meta property="og:title" content="Kroonenburg Family Office" />
+    <meta
+      property="og:description"
+      content="A single-family office stewarding capital, governance and legacy across generations."
+    />
+    <meta property="og:type" content="website" />
+    <link rel="stylesheet" href="/assets/css/site.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f3ead6'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='19' font-weight='700' text-anchor='middle' fill='%23b4532a'%3EK%3C/text%3E%3C/svg%3E"
+    />
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
-    <div class="frame">
-      <main>
-        <div class="watermark" aria-hidden="true">0</div>
-        <p class="kicker">
-          <span class="live">Live</span>
-          <span>Weekend 0</span>
-          <span>Amplify</span>
-        </p>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="shell">
+        <a class="wordmark" href="/">
+          <span class="mark" aria-hidden="true">K</span>
+          <span>Kroonenburg</span>
+          <span class="sub">Family Office</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="/" aria-current="page">Home</a>
+          <a href="/#team">Team</a>
+          <a href="/contact.html">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="hero shell">
+        <p class="eyebrow">Established for the long horizon</p>
         <div class="rule" aria-hidden="true"></div>
-        <h1>Hello,<br /><span>world.</span></h1>
-        <p>
-          Weekend 0 is live. The smallest possible proof that something shipped:
-          a page on the internet, hosted on Amplify.
+        <h1>Stewardship,<br /><span>generation to generation.</span></h1>
+        <p class="lede">
+          Kroonenburg Family Office is a single-family office built around one
+          mandate: protect what has been earned, grow it with discipline, and
+          hand it on intact. A small, senior team handles the capital, the
+          counsel and the calendar so the family can focus on the decisions that
+          matter.
         </p>
-        <div class="meta">
-          <span>First edited on a 2020 Intel MacBook Pro.</span>
-          <span>Still a hello. Still live.</span>
+        <div class="actions">
+          <a class="btn" href="/contact.html">Speak with the office</a>
+          <a class="btn btn-ghost" href="#team">Meet the team</a>
         </div>
-      </main>
-    </div>
+      </section>
+
+      <section class="section shell" id="practice">
+        <p class="eyebrow">What the office does</p>
+        <h2>Three functions, one table.</h2>
+        <p>
+          Family capital rarely fails for want of a good idea. It fails on
+          administration, on tax and structure, on succession left unwritten. The
+          office is organised to close those gaps.
+        </p>
+        <div class="grid" style="margin-top: 2.25rem">
+          <article class="card">
+            <p class="num">01</p>
+            <h3>Capital &amp; reporting</h3>
+            <p>
+              Consolidated reporting across entities and custodians, treasury and
+              liquidity planning, manager selection and oversight, and an annual
+              review that treats the balance sheet as a whole.
+            </p>
+          </article>
+          <article class="card">
+            <p class="num">02</p>
+            <h3>Governance &amp; counsel</h3>
+            <p>
+              Trust and entity structuring, succession and estate documents,
+              philanthropic vehicles, and the standing legal review that keeps
+              cross-border holdings compliant and current.
+            </p>
+          </article>
+          <article class="card">
+            <p class="num">03</p>
+            <h3>Household &amp; operations</h3>
+            <p>
+              Diary and travel, vendor and property coordination, document
+              custody and confidentiality, and a single point of contact for
+              every request that reaches the family.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section shell" id="team">
+        <p class="eyebrow">The team</p>
+        <h2>Three people you will actually speak to.</h2>
+        <p>
+          No account managers and no handoffs. Each principal owns their remit
+          end to end and is reachable directly.
+        </p>
+        <div class="grid" style="margin-top: 2.25rem">
+          <a class="card person-card" href="/team/executive-assistant.html">
+            <span class="portrait" aria-hidden="true">AV</span>
+            <p class="role">Executive Assistant</p>
+            <p class="name">Anneke de Vries</p>
+            <p>
+              Runs the office day to day — the diary, the travel, the vendors and
+              the documents. The first call for anything the family needs.
+            </p>
+            <span class="more">Read profile →</span>
+          </a>
+          <a class="card person-card" href="/team/cfo.html">
+            <span class="portrait" aria-hidden="true">DO</span>
+            <p class="role">Chief Financial Officer</p>
+            <p class="name">Daniel Osei</p>
+            <p>
+              Owns the balance sheet: consolidated reporting, treasury, tax
+              coordination and oversight of every external manager.
+            </p>
+            <span class="more">Read profile →</span>
+          </a>
+          <a class="card person-card" href="/team/chief-counsel.html">
+            <span class="portrait" aria-hidden="true">PR</span>
+            <p class="role">Chief Counsel</p>
+            <p class="name">Priya Raghavan</p>
+            <p>
+              Leads structuring, succession and compliance, and instructs outside
+              counsel across every jurisdiction the family touches.
+            </p>
+            <span class="more">Read profile →</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section shell" id="approach">
+        <p class="eyebrow">How we work</p>
+        <h2>Quiet, documented, unhurried.</h2>
+        <div class="grid" style="margin-top: 2rem">
+          <article class="card">
+            <h3>Discretion by default</h3>
+            <p>
+              Nothing about the family's affairs leaves the office. Access is
+              least-privilege, records are retained deliberately, and the team is
+              small on purpose.
+            </p>
+          </article>
+          <article class="card">
+            <h3>One consolidated view</h3>
+            <p>
+              Every entity, account and obligation rolls into a single quarterly
+              picture — so decisions are made against the whole, not a slice.
+            </p>
+          </article>
+          <article class="card">
+            <h3>Decisions written down</h3>
+            <p>
+              Mandates, delegations and rationale are recorded. The next
+              generation inherits the reasoning, not just the assets.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section shell">
+        <div class="rule" aria-hidden="true"></div>
+        <h2>Start a conversation.</h2>
+        <p>
+          Enquiries from family members, advisers, counterparties and prospective
+          partners are read by the office and answered directly.
+        </p>
+        <div class="actions">
+          <a class="btn" href="/contact.html">Contact the office</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell">
+        <div>
+          <a class="wordmark" href="/">
+            <span class="mark" aria-hidden="true">K</span>
+            <span>Kroonenburg</span>
+          </a>
+          <p style="margin-top: 0.9rem">
+            A single-family office. Nothing on this site is an offer, a
+            solicitation, or investment, tax or legal advice.
+          </p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="/">Home</a>
+          <a href="/team/executive-assistant.html">Executive Assistant</a>
+          <a href="/team/cfo.html">Chief Financial Officer</a>
+          <a href="/team/chief-counsel.html">Chief Counsel</a>
+          <a href="/contact.html">Contact</a>
+        </nav>
+      </div>
+      <div class="shell">
+        <p class="legal">
+          © <span id="year">2026</span> Kroonenburg Family Office · All rights
+          reserved
+        </p>
+      </div>
+    </footer>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
   </body>
 </html>

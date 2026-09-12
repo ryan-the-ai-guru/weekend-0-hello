@@ -1,0 +1,14 @@
+{
+  "name": "kfo-contact-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Serverless contact API for the Kroonenburg Family Office site.",
+  "scripts": {
+    "test": "node --test src/contact/index.test.mjs"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-dynamodb": "^3.658.0",
+    "@aws-sdk/client-sesv2": "^3.658.0"
+  }
+}

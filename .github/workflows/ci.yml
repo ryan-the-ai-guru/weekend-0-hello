@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Site and API checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Check internal links and anchors
+        run: node scripts/check-links.mjs
+
+      - name: Install contact API dev dependencies
+        working-directory: infrastructure
+        run: npm ci --no-audit --no-fund
+
+      - name: Test contact handler
+        working-directory: infrastructure
+        run: npm test
+
+      - name: Install the SAM CLI
+        uses: aws-actions/setup-sam@v2
+        with:
+          use-installer: true
+
+      - name: Validate SAM template
+        working-directory: infrastructure
+        # --lint runs cfn-lint locally. sam validate insists on resolving a
+        # region and credentials even though it calls nothing, so give it
+        # placeholders rather than wiring real ones into pull-request CI.
+        env:
+          AWS_REGION: us-east-1
+          AWS_DEFAULT_REGION: us-east-1
+          AWS_ACCESS_KEY_ID: testing
+          AWS_SECRET_ACCESS_KEY: testing
+        run: sam validate --lint

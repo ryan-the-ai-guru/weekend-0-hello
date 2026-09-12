@@ -1,0 +1,16 @@
+# Build output
+dist/
+.aws-sam/
+
+# Dependencies (Lambda gets the AWS SDK from the managed runtime)
+node_modules/
+
+# Local config and secrets
+.env
+.env.*
+samconfig.local.toml
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+*.swp

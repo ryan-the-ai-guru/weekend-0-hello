@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Contact · Kroonenburg Family Office</title>
+    <meta
+      name="description"
+      content="Contact Kroonenburg Family Office. Enquiries are read by the office and answered directly."
+    />
+    <link rel="stylesheet" href="/assets/css/site.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f3ead6'/%3E%3Ctext x='16' y='23' font-family='Georgia,serif' font-size='19' font-weight='700' text-anchor='middle' fill='%23b4532a'%3EK%3C/text%3E%3C/svg%3E"
+    />
+    <!--
+      Set the deployed API endpoint here (CloudFormation output `ContactApiEndpoint`).
+      While it is empty the form falls back to a mailto: draft so the page is
+      never a dead end.
+    -->
+    <script>
+      window.KFO_CONTACT_API = "";
+      window.KFO_CONTACT_EMAIL = "office@kroonenburg.capital";
+    </script>
+  </head>
+  <body>
+    <div class="grain" aria-hidden="true"></div>
+    <a class="skip-link" href="#main">Skip to content</a>
+
+    <header class="site-header">
+      <div class="shell">
+        <a class="wordmark" href="/">
+          <span class="mark" aria-hidden="true">K</span>
+          <span>Kroonenburg</span>
+          <span class="sub">Family Office</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="/">Home</a>
+          <a href="/#team">Team</a>
+          <a href="/contact.html" aria-current="page">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="main">
+      <section class="shell" style="padding-block: clamp(2.5rem, 7vw, 4.5rem) 0">
+        <p class="eyebrow">Contact</p>
+        <div class="rule" aria-hidden="true"></div>
+        <h1>Write to the office.</h1>
+        <p class="lede" style="font-size: 1.15rem">
+          Messages are read by the Executive Assistant and routed to the right
+          person the same working day. Please do not send account numbers,
+          passwords or other credentials through this form.
+        </p>
+      </section>
+
+      <section class="section shell contact-layout">
+        <div>
+          <form class="form" id="contact-form" novalidate>
+            <div class="field">
+              <label for="name">Your name <span class="req" aria-hidden="true">*</span></label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                autocomplete="name"
+                maxlength="120"
+                required
+              />
+              <p class="error" id="name-error" hidden></p>
+            </div>
+
+            <div class="field">
+              <label for="email">Email <span class="req" aria-hidden="true">*</span></label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                maxlength="254"
+                required
+              />
+              <p class="error" id="email-error" hidden></p>
+            </div>
+
+            <div class="field">
+              <label for="organisation">Organisation</label>
+              <input
+                id="organisation"
+                name="organisation"
+                type="text"
+                autocomplete="organization"
+                maxlength="160"
+              />
+            </div>
+
+            <div class="field">
+              <label for="topic">Who is this for?</label>
+              <select id="topic" name="topic">
+                <option value="general">The office — general enquiry</option>
+                <option value="executive-assistant">
+                  Executive Assistant — scheduling &amp; logistics
+                </option>
+                <option value="cfo">
+                  Chief Financial Officer — capital &amp; reporting
+                </option>
+                <option value="chief-counsel">
+                  Chief Counsel — legal &amp; governance
+                </option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="message">Message <span class="req" aria-hidden="true">*</span></label>
+              <textarea id="message" name="message" maxlength="5000" required></textarea>
+              <p class="hint">
+                <span id="message-count">0</span> / 5000 characters
+              </p>
+              <p class="error" id="message-error" hidden></p>
+            </div>
+
+            <!-- Honeypot: hidden from people, tempting to bots. -->
+            <div class="hp" aria-hidden="true">
+              <label for="company-website">Do not fill this in</label>
+              <input
+                id="company-website"
+                name="company_website"
+                type="text"
+                tabindex="-1"
+                autocomplete="off"
+              />
+            </div>
+
+            <div>
+              <button class="btn" type="submit" id="submit">Send message</button>
+            </div>
+
+            <p class="form-status" id="form-status" role="status" aria-live="polite" hidden></p>
+          </form>
+        </div>
+
+        <aside class="sidebar">
+          <div class="block">
+            <h2>Direct</h2>
+            <dl class="detail-list">
+              <div>
+                <dt>Email</dt>
+                <dd>
+                  <a id="office-email" href="mailto:office@kroonenburg.capital"
+                    >office@kroonenburg.capital</a
+                  >
+                </dd>
+              </div>
+              <div>
+                <dt>Hours</dt>
+                <dd>Monday to Friday, 09:00–17:30</dd>
+              </div>
+              <div>
+                <dt>Response</dt>
+                <dd>Same working day for most enquiries</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="block">
+            <h2>Please note</h2>
+            <p style="font-size: 0.92rem; margin: 0">
+              This form is not a secure channel for confidential material. For
+              documents or sensitive information, ask the office for a secure
+              link first. Nothing sent here creates a client relationship or
+              constitutes advice.
+            </p>
+          </div>
+          <div class="block">
+            <h2>The team</h2>
+            <ul class="list">
+              <li><a href="/team/executive-assistant.html">Executive Assistant</a></li>
+              <li><a href="/team/cfo.html">Chief Financial Officer</a></li>
+              <li><a href="/team/chief-counsel.html">Chief Counsel</a></li>
+            </ul>
+          </div>
+        </aside>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="shell">
+        <div>
+          <a class="wordmark" href="/">
+            <span class="mark" aria-hidden="true">K</span>
+            <span>Kroonenburg</span>
+          </a>
+          <p style="margin-top: 0.9rem">
+            A single-family office. Nothing on this site is an offer, a
+            solicitation, or investment, tax or legal advice.
+          </p>
+        </div>
+        <nav class="footer-nav" aria-label="Footer">
+          <a href="/">Home</a>
+          <a href="/team/executive-assistant.html">Executive Assistant</a>
+          <a href="/team/cfo.html">Chief Financial Officer</a>
+          <a href="/team/chief-counsel.html">Chief Counsel</a>
+          <a href="/contact.html">Contact</a>
+        </nav>
+      </div>
+      <div class="shell">
+        <p class="legal">
+          © <span id="year">2026</span> Kroonenburg Family Office · All rights
+          reserved
+        </p>
+      </div>
+    </footer>
+    <script>
+      document.getElementById("year").textContent = new Date().getFullYear();
+    </script>
+    <script src="/assets/js/contact.js" defer></script>
+  </body>
+</html>
